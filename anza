@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>ANZA · Web Developer</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    /* ===================== MAROON & GOLD ONLY ===================== */
+    :root {
+      --maroon-deep: #3D0F1A;
+      --maroon: #5C1626;
+      --maroon-rich: #7A1F32;
+      --maroon-soft: #94293F;
+      --gold: #D4AF37;
+      --gold-bright: #F2D06B;
+      --gold-soft: #E8C86A;
+      --gold-pale: #F7E8B0;
+      --black: #1A0508;
+
+      --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.45);
+      --shadow-gold: 0 10px 30px rgba(212, 175, 55, 0.25);
+
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'Inter', sans-serif;
+
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 100px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--maroon-deep);
+      color: var(--gold-pale);
+      line-height: 1.7;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(212, 175, 55, 0.05), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(122, 31, 50, 0.35), transparent 50%);
+      background-attachment: fixed;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--gold-pale);
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img, i { display: block; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ===================== SECTION HEADINGS ===================== */
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 60px;
+    }
+
+    .section-label::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 45px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+
+    .section-heading {
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 500;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    /* ===================== BUTTONS ===================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 1rem 2.2rem;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1px solid var(--gold);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s var(--ease-out);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+      color: var(--maroon-deep);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 45px rgba(212, 175, 55, 0.45);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--gold);
+    }
+
+    .btn-ghost::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s var(--ease-out);
+      z-index: -1;
+    }
+
+    .btn-ghost:hover {
+      color: var(--maroon-deep);
+    }
+
+    .btn-ghost:hover::before { transform: scaleX(1); }
+
+    .btn span, .btn i { position: relative; z-index: 1; }
+
+    /* ===================== NAVIGATION ===================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1.5rem 0;
+      transition: all 0.5s var(--ease-out);
+    }
+
+    .navbar.scrolled {
+      padding: 1rem 0;
+      background: rgba(61, 15, 26, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ===== THE "A" LOGO ===== */
+    .logo-a {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--maroon-rich), var(--maroon-deep));
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.08), var(--shadow-gold);
+      transition: transform 0.5s var(--ease-bounce);
+    }
+
+    .logo-a:hover { transform: rotate(360deg) scale(1.05); }
+
+    .logo-a::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 40%, rgba(212, 175, 55, 0.5) 50%, transparent 60%);
+      animation: shimmer 5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-pale);
+      position: relative;
+      padding: 0.5rem 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.5s var(--ease-out);
+    }
+
+    .nav-link:hover { color: var(--gold); }
+    .nav-link:hover::after { width: 100%; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 1001;
+    }
+
+    .bar {
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: all 0.4s var(--ease-out);
+    }
+
+    /* ===================== HERO SECTION ===================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 1.5rem 5rem;
+    }
+
+    .hero::before {
+      content: 'ANZA';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-display);
+      font-size: clamp(15rem, 35vw, 32rem);
+      font-weight: 700;
+      color: rgba(212, 175, 55, 0.03);
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    .hero-tagline::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+      font-weight: 500;
+      line-height: 1.02;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title .gold-italic {
+      font-style: italic;
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.7);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      line-height: 1.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Hero visual — ornamental monogram */
+    .hero-mono {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+    }
+
+    .mono-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+
+    .ring-1 {
+      inset: 0;
+      animation: spinSlow 40s linear infinite;
+    }
+
+    .ring-1::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--gold);
+    }
+
+    .ring-2 {
+      inset: 12%;
+      border-style: dashed;
+      animation: spinSlow 30s linear infinite reverse;
+    }
+
+    .ring-3 {
+      inset: 24%;
+      border-color: rgba(212, 175, 55, 0.4);
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .mono-core {
+      width: 62%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--maroon-rich), var(--maroon-deep) 70%);
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 9vw, 7rem);
+      font-weight: 700;
+      color: var(--gold);
+      box-shadow: 0 0 80px rgba(212, 175, 55, 0.2), inset 0 0 60px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      animation: coreFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes coreFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .mono-core::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 45%, rgba(212, 175, 55, 0.18) 50%, transparent 55%);
+      animation: shimmer 6s infinite;
+    }
+
+    .mono-corner {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--gold);
+    }
+
+    .corner-tl { top: 5%; left: 5%; border-right: none; border-bottom: none; }
+    .corner-tr { top: 5%; right: 5%; border-left: none; border-bottom: none; }
+    .corner-bl { bottom: 5%; left: 5%; border-right: none; border-top: none; }
+    .corner-br { bottom: 5%; right: 5%; border-left: none; border-top: none; }
+
+    /* ===================== SECTION SHELL ===================== */
+    .section {
+      padding: 7rem 1.5rem;
+      position: relative;
+    }
+
+    .section-alt {
+      background: linear-gradient(180deg, transparent, rgba(61, 15, 26, 0.4) 20%, rgba(61, 15, 26, 0.4) 80%, transparent);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0 1.5rem;
+    }
+
+    .divider-line {
+      height: 1px;
+      width: 100px;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+    }
+
+    .divider-diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      box-shadow: 0 0 12px var(--gold);
+    }
+
+    /* ===================== ABOUT SECTION ===================== */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-portrait {
+      position: relative;
+      aspect-ratio: 3/4;
+      border-radius: 4px;
+      background: linear-gradient(160deg, var(--maroon-rich), var(--maroon-deep));
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: var(--shadow-deep);
+    }
+
+    .about-portrait::before {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 2px;
+    }
+
+    .about-portrait i {
+      font-size: 6rem;
+      color: var(--gold);
+      opacity: 0.85;
+      position: relative;
+      z-index: 1;
+      animation: iconFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    .portrait-frame-tag {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      padding: 0.4rem 1rem;
+      background: rgba(61, 15, 26, 0.6);
+      backdrop-filter: blur(6px);
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .about-copy p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.78);
+      margin-bottom: 1.4rem;
+      line-height: 1.9;
+    }
+
+    .about-copy strong { color: var(--gold); font-weight: 500; }
+
+    .about-signature {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .about-metrics {
+      display: flex;
+      gap: 3rem;
+      margin: 2.5rem 0;
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+    }
+
+    .metric-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247, 232, 176, 0.55);
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    /* ===================== EXPERTISE SECTION (skills) ===================== */
+    .expertise-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0 4rem;
+      margin-top: 3.5rem;
+    }
+
+    .expertise-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      transition: all 0.5s var(--ease-out);
+      position: relative;
+    }
+
+    .expertise-item::before {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.6s var(--ease-out);
+    }
+
+    .expertise-item:hover::before { width: 100%; }
+
+    .expertise-item:hover { transform: translateX(10px); }
+
+    .expertise-num {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--gold);
+      opacity: 0.6;
+      font-style: italic;
+      min-width: 40px;
+    }
+
+    .expertise-body h3 {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--gold-pale);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .expertise-body p {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.6);
+      line-height: 1.7;
+    }
+
+    .expertise-icon {
+      margin-left: auto;
+      font-size: 1.3rem;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s var(--ease-bounce);
+      transform: translateX(-10px);
+    }
+
+    .expertise-item:hover .expertise-icon {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ===================== SERVICES SECTION ===================== */
+    .services-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: end;
+      margin-bottom: 4rem;
+    }
+
+    .services-intro {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.7);
+      line-height: 1.9;
+      padding-bottom: 0.5rem;
+    }
+
+    .services-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .service-row {
+      display: grid;
+      grid-template-columns: 70px 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 2.5rem 1rem;
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      position: relative;
+      transition: all 0.5s var(--ease-out);
+      cursor: default;
+    }
+
+    .service-row:last-child {
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    .service-row::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.06), transparent);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .service-row:hover::before { opacity: 1; }
+
+    .service-row:hover { padding-left: 2rem; }
+
+    .service-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-style: italic;
+      color: rgba(212, 175, 55, 0.35);
+      transition: color 0.4s ease;
+    }
+
+    .service-row:hover .service-num { color: var(--gold); }
+
+    .service-content h3 {
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+      transition: color 0.4s ease;
+    }
+
+    .service-row:hover .service-content h3 { color: var(--gold); }
+
+    .service-content p {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.6);
+      line-height: 1.6;
+    }
+
+    .service-arrow {
+      font-size: 1.4rem;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateX(-15px);
+      transition: all 0.5s var(--ease-bounce);
+    }
+
+    .service-row:hover .service-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ===================== PHILOSOPHY / QUOTE SECTION ===================== */
+    .quote-section {
+      padding: 8rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-mark {
+      font-family: var(--font-display);
+      font-size: 8rem;
+      color: rgba(212, 175, 55, 0.15);
+      line-height: 1;
+      margin-bottom: -2rem;
+    }
+
+    .quote-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      font-style: italic;
+      font-weight: 500;
+      color: var(--gold-pale);
+      max-width: 850px;
+      margin: 0 auto 2rem;
+      line-height: 1.4;
+    }
+
+    .quote-text em { color: var(--gold); }
+
+    .quote-author {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .quote-author::before,
+    .quote-author::after {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+      vertical-align: middle;
+      margin: 0 1rem;
+      opacity: 0.5;
+    }
+
+    /* ===================== CONTACT SECTION ===================== */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-lead {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.72);
+      line-height: 1.9;
+      margin-bottom: 2.5rem;
+      max-width: 420px;
+    }
+
+    .contact-email-block {
+      display: block;
+      padding: 2rem;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 4px;
+      background: linear-gradient(145deg, rgba(122, 31, 50, 0.3), rgba(61, 15, 26, 0.5));
+      transition: all 0.5s var(--ease-out);
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-email-block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--gold), transparent);
+      transition: width 0.5s var(--ease-out);
+    }
+
+    .contact-email-block:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .contact-email-block:hover::before { width: 5px; }
+
+    .email-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .email-value {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--gold-pale);
+      transition: color 0.3s ease;
+    }
+
+    .contact-email-block:hover .email-value { color: var(--gold); }
+
+    .contact-socials {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .contact-socials a {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 1rem;
+      transition: all 0.5s var(--ease-bounce);
+    }
+
+    .contact-socials a:hover {
+      background: var(--gold);
+      color: var(--maroon-deep);
+      transform: translateY(-6px) rotate(8deg);
+      box-shadow: var(--shadow-gold);
+    }
+
+    /* Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .field {
+      position: relative;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 0.9rem 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--gold-pale);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      transition: border-color 0.4s ease;
+      border-radius: 0;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: rgba(247, 232, 176, 0.3);
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-bottom-color: var(--gold);
+    }
+
+    .field input:invalid:not(:placeholder-shown),
+    .field textarea:invalid:not(:placeholder-shown) {
+      border-bottom-color: #ff6b6b;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-status {
+      font-size: 0.85rem;
+      text-align: left;
+      min-height: 1.3rem;
+      transition: color 0.3s ease;
+    }
+
+    /* ===================== FOOTER ===================== */
+    .footer {
+      background: var(--black);
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      padding: 4rem 1.5rem 2rem;
+      position: relative;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand .logo-a {
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.5);
+      line-height: 1.8;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .footer-col a {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.6);
+      transition: color 0.3s ease, padding-left 0.3s ease;
+    }
+
+    .footer-col a:hover {
+      color: var(--gold);
+      padding-left: 6px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(212, 175, 55, 0.12);
+      padding-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: rgba(247, 232, 176, 0.4);
+    }
+
+    .footer-heart {
+      color: var(--gold);
+      animation: heartBeat 1.6s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+    }
+
+    .back-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: gap 0.3s ease;
+    }
+
+    .back-top:hover { gap: 0.8rem; }
+
+    /* ===================== SCROLL ANIMATIONS ===================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+      will-change: opacity, transform;
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-70px);
+      transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(70px);
+      transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+    }
+
+    .reveal.visible,
+    .reveal-left.visible,
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+
+    .stagger.visible > * { opacity: 1; transform: translateY(0); }
+
+    .stagger.visible > *:nth-child(1) { transition-delay: 0.05s; }
+    .stagger.visible > *:nth-child(2) { transition-delay: 0.12s; }
+    .stagger.visible > *:nth-child(3) { transition-delay: 0.19s; }
+    .stagger.visible > *:nth-child(4) { transition-delay: 0.26s; }
+    .stagger.visible > *:nth-child(5) { transition-delay: 0.33s; }
+    .stagger.visible > *:nth-child(6) { transition-delay: 0.40s; }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-tagline { justify-content: center; }
+      .hero-mono { max-width: 340px; margin: 0 auto; }
+
+      .about-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .about-portrait { max-width: 320px; margin: 0 auto; }
+
+      .expertise-list { grid-template-columns: 1fr; }
+
+      .services-header { grid-template-columns: 1fr; gap: 1.5rem; }
+
+      .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 75%;
+        max-width: 320px;
+        height: 100vh;
+        background: var(--maroon-deep);
+        border-left: 1px solid rgba(212, 175, 55, 0.2);
+        flex-direction: column;
+        justify-content: center;
+        gap: 2.5rem;
+        transition: right 0.5s var(--ease-out);
+        padding: 2rem;
+        z-index: 1000;
+      }
+
+      .nav-links.active { right: 0; }
+      .hamburger { display: flex; }
+
+      .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+      .hamburger.active .bar:nth-child(2) { opacity: 0; }
+      .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+      .service-row { grid-template-columns: 50px 1fr auto; gap: 1rem; padding: 2rem 0.5rem; }
+      .service-row:hover { padding-left: 1rem; }
+      .service-content h3 { font-size: 1.15rem; }
+
+      .form-row { grid-template-columns: 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .footer-brand p { margin: 0 auto; }
+      .footer-col ul { align-items: center; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .section { padding: 5rem 1.25rem; }
+      .hero { padding: 7rem 1.25rem 3rem; }
+
+      .hero-actions { flex-direction: column; width: 100%; }
+      .hero-actions .btn { width: 100%; justify-content: center; }
+
+      .about-metrics { gap: 1.5rem; flex-wrap: wrap; }
+      .metric-value { font-size: 2rem; }
+
+      .quote-section { padding: 5rem 1.25rem; }
+      .quote-mark { font-size: 5rem; }
+
+      .email-value { font-size: 1.2rem; word-break: break-all; }
+
+      .logo-a { width: 48px; height: 48px; font-size: 1.6rem; }
+    }
+
+    /* ===================== REDUCED MOTION ===================== */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal, .reveal-left, .reveal-right, .stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#home" class="logo-a" aria-label="ANZA home">A</a>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#expertise" class="nav-link">Expertise</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== HERO ===== -->
+    <section id="home" class="hero">
+      <div class="hero-inner">
+        <div class="reveal-left">
+          <span class="hero-tagline">Web Developer · Designer</span>
+          <h1 class="hero-title">
+            I'm <span class="gold-italic">Anza.</span>
+            I build the web, beautifully.
+          </h1>
+          <p class="hero-desc">
+            A web developer shaping modern, responsive and refined digital experiences —
+            where clean code meets considered design.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-gold">
+              <span>Start a Project</span> <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#about" class="btn btn-ghost">
+              <span>Discover More</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-mono reveal-right">
+          <div class="mono-ring ring-1"></div>
+          <div class="mono-ring ring-2"></div>
+          <div class="mono-ring ring-3"></div>
+          <div class="mono-core">A</div>
+          <span class="mono-corner corner-tl"></span>
+          <span class="mono-corner corner-tr"></span>
+          <span class="mono-corner corner-bl"></span>
+          <span class="mono-corner corner-br"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about" class="section section-alt">
+      <div class="container">
+        <div class="about-layout">
+          <div class="about-portrait reveal-left">
+            <i class="fas fa-user-tie"></i>
+            <span class="portrait-frame-tag">Anza · Web Developer</span>
+          </div>
+
+          <div class="about-copy reveal-right">
+            <span class="section-label">About Me</span>
+            <h2 class="section-heading">A developer with an <em>eye for detail.</em></h2>
+            <p>
+              I'm <strong>Anza</strong> — a web developer who believes a great website
+              should feel effortless. I build interfaces that are as thoughtful under
+              the hood as they are beautiful on the surface.
+            </p>
+            <p>
+              From the first line of markup to the final polish, I care about
+              responsiveness, accessibility and the small interactions that make a
+              site feel alive. My goal is simple: turn your ideas into digital
+              experiences that work and feel right.
+            </p>
+
+            <div class="about-metrics">
+              <div>
+                <span class="metric-value">100%</span>
+                <span class="metric-label">Responsive</span>
+              </div>
+              <div>
+                <span class="metric-value">∞</span>
+                <span class="metric-label">Curiosity</span>
+              </div>
+              <div>
+                <span class="metric-value">24/7</span>
+                <span class="metric-label">Dedication</span>
+              </div>
+            </div>
+
+            <p class="about-signature">Anza</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EXPERTISE / SKILLS ===== -->
+    <section id="expertise" class="section">
+      <div class="container">
+        <div class="reveal">
+          <span class="section-label">Expertise</span>
+          <h2 class="section-heading">What I <em>do best.</em></h2>
+        </div>
+
+        <div class="expertise-list stagger">
+          <div class="expertise-item">
+            <span class="expertise-num">01</span>
+            <div class="expertise-body">
+              <h3>Semantic HTML5</h3>
+              <p>Clean, accessible markup that forms a rock-solid foundation.</p>
+            </div>
+            <i class="fas fa-code expertise-icon"></i>
+          </div>
+
+          <div class="expertise-item">
+            <span class="expertise-num">02</span>
+            <div class="expertise-body">
+              <h3>CSS3 &amp; Modern Layout</h3>
+              <p>Flexbox, Grid and fluid design that adapts beautifully.</p>
+            </div>
+            <i class="fas fa-layer-group expertise-icon"></i>
+          </div>
+
+          <div class="expertise-item">
+            <span class="expertise-num">03</span>
+            <div class="expertise-body">
+              <h3>JavaScript</h3>
+              <p>Vanilla JS for smooth, interactive, dependency-free experiences.</p>
+            </div>
+            <i class="fab fa-js expertise-icon"></i>
+          </div>
+
+          <div class="expertise-item">
+            <span class="expertise-num">04</span>
+            <div class="expertise-body">
+              <h3>Responsive Design</h3>
+              <p>Mobile-first layouts that feel right on every screen size.</p>
+            </div>
+            <i class="fas fa-mobile-alt expertise-icon"></i>
+          </div>
+
+          <div class="expertise-item">
+            <span class="expertise-num">05</span>
+            <div class="expertise-body">
+              <h3>UI / UX Fundamentals</h3>
+              <p>Design decisions grounded in clarity, rhythm and usability.</p>
+            </div>
+            <i class="fas fa-paint-brush expertise-icon"></i>
+          </div>
+
+          <div class="expertise-item">
+            <span class="expertise-num">06</span>
+            <div class="expertise-body">
+              <h3>Git &amp; Version Control</h3>
+              <p>Organised, collaborative workflows with Git and GitHub.</p>
+            </div>
+            <i class="fab fa-git-alt expertise-icon"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section id="services" class="section section-alt">
+      <div class="container">
+        <div class="services-header">
+          <div class="reveal-left">
+            <span class="section-label">Services</span>
+            <h2 class="section-heading">How I can <em>help you.</em></h2>
+          </div>
+          <p class="services-intro reveal-right">
+            Whether you need a brand-new website, a polished landing page or a
+            responsive refresh — I offer a focused set of services designed to
+            bring your vision online with care.
+          </p>
+        </div>
+
+        <div class="services-showcase stagger">
+          <div class="service-row">
+            <span class="service-num">01</span>
+            <div class="service-content">
+              <h3>Responsive Website Development</h3>
+              <p>Custom websites built to look and work flawlessly on every device.</p>
+            </div>
+            <i class="fas fa-arrow-right service-arrow"></i>
+          </div>
+
+          <div class="service-row">
+            <span class="service-num">02</span>
+            <div class="service-content">
+              <h3>Landing Page Design</h3>
+              <p>Focused, high-impact pages designed to convert and impress.</p>
+            </div>
+            <i class="fas fa-arrow-right service-arrow"></i>
+          </div>
+
+          <div class="service-row">
+            <span class="service-num">03</span>
+            <div class="service-content">
+              <h3>Portfolio Websites</h3>
+              <p>Elegant personal portfolios that let your work speak for itself.</p>
+            </div>
+            <i class="fas fa-arrow-right service-arrow"></i>
+          </div>
+
+          <div class="service-row">
+            <span class="service-num">04</span>
+            <div class="service-content">
+              <h3>UI Styling &amp; Refinement</h3>
+              <p>Give an existing project a modern, cohesive visual upgrade.</p>
+            </div>
+            <i class="fas fa-arrow-right service-arrow"></i>
+          </div>
+
+          <div class="service-row">
+            <span class="service-num">05</span>
+            <div class="service-content">
+              <h3>Website Maintenance</h3>
+              <p>Ongoing updates, fixes and care to keep your site running smoothly.</p>
+            </div>
+            <i class="fas fa-arrow-right service-arrow"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== QUOTE / PHILOSOPHY ===== -->
+    <section class="quote-section">
+      <div class="container reveal">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">
+          Great design is invisible — it's the <em>feeling</em> that a website
+          simply works, the way it should.
+        </p>
+        <span class="quote-author">Anza</span>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="section section-alt">
+      <div class="container">
+        <div class="contact-layout">
+          <div class="reveal-left">
+            <span class="section-label">Contact</span>
+            <h2 class="section-heading">Have a project <em>in mind?</em></h2>
+            <p class="contact-lead">
+              I'm always open to new ideas and collaborations. Reach out by email
+              or send a message — I'd love to hear what you're building.
+            </p>
+
+            <a href="mailto:anza@example.com" class="contact-email-block">
+              <span class="email-label">Email</span>
+              <span class="email-value">anza@example.com</span>
+            </a>
+
+            <div class="contact-socials">
+              <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+            </div>
+          </div>
+
+          <form class="contact-form reveal-right" id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="field">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required>
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" placeholder="Project inquiry" required>
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4" placeholder="Tell me about your project..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold" style="align-self:flex-start;">
+              <span>Send Message</span> <i class="fas fa-paper-plane"></i>
+            </button>
+            <p class="form-status" id="formStatus"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#home" class="logo-a" aria-label="ANZA home">A</a>
+          <p>
+            Crafting modern, responsive and refined websites that help people and
+            brands shine online.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#expertise">Expertise</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:anza@example.com">anza@example.com</a></li>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Dribbble</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>Designed &amp; Developed with <span class="footer-heart">♥</span> by ANZA</p>
+        <p>&copy; 2025 ANZA. All rights reserved.</p>
+        <a href="#home" class="back-top">Back to top <i class="fas fa-arrow-up"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== JAVASCRIPT ===================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ===================== NAVBAR SCROLL ===================== */
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', function () {
+        navbar.classList.toggle('scrolled', window.scrollY > 40);
+      }, { passive: true });
+
+      /* ===================== MOBILE MENU ===================== */
+      const hamburger = document.getElementById('hamburger');
+      const navLinks = document.getElementById('navLinks');
+
+      function toggleMenu() {
+        const open = navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', open);
+      }
+
+      function closeMenu() {
+        navLinks.classList.remove('active');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+
+      hamburger.addEventListener('click', toggleMenu);
+      document.querySelectorAll('.nav-link').forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      /* ===================== SCROLL REVEAL ===================== */
+      const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .stagger');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduced || !('IntersectionObserver' in window)) {
+        revealEls.forEach(function (el) { el.classList.add('visible'); });
+      } else {
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+        revealEls.forEach(function (el) { observer.observe(el); });
+      }
+
+      /* ===================== FORM VALIDATION ===================== */
+      const form = document.getElementById('contactForm');
+      const status = document.getElementById('formStatus');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const subject = document.getElementById('subject');
+        const message = document.getElementById('message');
+
+        status.textContent = '';
+        status.style.color = '';
+
+        if (!name.value.trim()) {
+          status.textContent = 'Please enter your name.';
+          status.style.color = '#ff8a80';
+          name.focus(); return;
+        }
+        if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+          status.textContent = 'Please enter a valid email address.';
+          status.style.color = '#ff8a80';
+          email.focus(); return;
+        }
+        if (!subject.value.trim()) {
+          status.textContent = 'Please enter a subject.';
+          status.style.color = '#ff8a80';
+          subject.focus(); return;
+        }
+        if (!message.value.trim()) {
+          status.textContent = 'Please enter your message.';
+          status.style.color = '#ff8a80';
+          message.focus(); return;
+        }
+
+        status.textContent = 'Thank you, ' + name.value.trim() + '! Your message has been sent (demo only).';
+        status.style.color = '#F2D06B';
+        form.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
